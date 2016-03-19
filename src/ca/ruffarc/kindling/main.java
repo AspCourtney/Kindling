@@ -19,11 +19,11 @@ public class main {
         Screen screen = new Screen();
         
         try {
-            map.loadFromFile(main.class.getResource("/maps/map.txt"));
+            map.loadFromNBT(main.class.getResource("/maps/map.dat"));
             
-            for (int i = 0; i < Map.HEIGHT; ++i) {
-                for (int a = 0; a < Map.WIDTH; ++a) {
-                    map.tiles[i * Map.HEIGHT + a].draw(screen);
+            for (int i = 0; i < map.height; ++i) {
+                for (int a = 0; a < map.width; ++a) {
+                    map.tiles[i * map.height + a].draw(screen);
                 }
                 screen.line();
             }
