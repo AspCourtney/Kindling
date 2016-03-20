@@ -20,7 +20,7 @@ public class Tile0 extends Tile {
 
     @Override
     public void draw(Screen screen) {
-        screen.text("0", x * HEIGHT, y * WIDTH);
+        screen.text("0", x * HEIGHT + X_OFFSET, y * WIDTH + Y_OFFSET);
     }
 
     @Override

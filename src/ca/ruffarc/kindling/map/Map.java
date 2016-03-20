@@ -74,6 +74,7 @@ public class Map {
         for (int h = 0; h < map.height; ++h) {
             for (int w = 0; w < map.width; ++w) {
                 index = h * map.width + w;
+                //System.out.println("Index: " + index + " @x:" + h + " y:" + w);
                 value = bytes[index];
                 
                 switch(value) {
