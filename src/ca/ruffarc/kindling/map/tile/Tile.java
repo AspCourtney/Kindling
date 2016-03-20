@@ -11,7 +11,7 @@ import ca.ruffarc.kindling.screen.Screen;
  *
  * @author daniel
  */
-public abstract class Tile {
+public class Tile {
     // This is a specific tile in the map.
 
     // The tiles heght and width -> always the same for every tile.
@@ -19,14 +19,14 @@ public abstract class Tile {
     public static final int WIDTH = 32;
 
     // The position of the tile.
-    public int x;
-    public int y;
+    protected int x;
+    protected int y;
     
     public Tile(int x, int y) {
         this.x = x;
         this.y = y;
     }
     
-    public abstract void draw(Screen screen);
-    public abstract boolean collide();
+    public void draw(Screen screen) {}
+    public boolean collide() { return false; }
 }

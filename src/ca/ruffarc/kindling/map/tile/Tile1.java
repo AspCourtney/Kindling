@@ -19,11 +19,11 @@ public class Tile1 extends Tile {
 
     @Override
     public void draw(Screen screen) {
-        screen.text("1");
+        screen.text("1", x * HEIGHT, y * WIDTH);
     }
 
     @Override
     public boolean collide() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
 }

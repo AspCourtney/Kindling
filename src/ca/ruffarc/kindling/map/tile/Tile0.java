@@ -15,16 +15,17 @@ public class Tile0 extends Tile {
     
     public Tile0(int x, int y) {
         super(x, y);
+        //System.out.println("Tile1 init x:" + x + " y:" + y);
     }
 
     @Override
     public void draw(Screen screen) {
-        screen.text("0");
+        screen.text("0", x * HEIGHT, y * WIDTH);
     }
 
     @Override
     public boolean collide() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
     
 }

@@ -6,6 +6,9 @@
 package ca.ruffarc.kindling.map;
 
 import ca.ruffarc.kindling.map.tile.*;
+import ca.ruffarc.kindling.screen.Screen;
+import com.flowpowered.nbt.*;
+import com.flowpowered.nbt.stream.NBTInputStream;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,6 +24,9 @@ public class Map {
     public Tile[] tiles;
     public static final int HEIGHT = 4;
     public static final int WIDTH = 4;
+    
+    public int height;
+    public int width;
     
     public void loadFromFile(URL path) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(path.getPath()));
@@ -44,6 +50,45 @@ public class Map {
                     case "1": tiles[i * WIDTH + a] = new Tile1(i, a); break;
                 }
             }
+        }
+    }
+    
+    public static Map loadFromNBT(URL path) throws IOException {
+        NBTInputStream i = new NBTInputStream(path.openStream());
+        CompoundTag t = (CompoundTag) i.readTag();
+        i.close();
+        
+        Map map = new Map();
+        
+        CompoundMap data = ((CompoundTag) t.getValue().get("Data")).getValue();
+        
+        CompoundMap size = ((CompoundTag) data.get("Size")).getValue();
+        map.height = ((IntTag) size.get("Height")).getValue();
+        map.width = ((IntTag) size.get("Width")).getValue();
+        map.tiles = new Tile[map.height * map.width];
+                
+        byte[] bytes = ((ByteArrayTag) data.get("Map")).getValue();
+        byte value;
+        int index;
+        
+        for (int h = 0; h < map.height; ++h) {
+            for (int w = 0; w < map.width; ++w) {
+                index = h * map.width + w;
+                value = bytes[index];
+                
+                switch(value) {
+                    case 0: map.tiles[index] = new Tile0(h, w); break;
+                    case 1: map.tiles[index] = new Tile1(h, w); break;
+                }
+            }
+        }
+        
+        return map;
+    }
+    
+    public void draw(Screen screen) {
+        for (int i = 0; i < tiles.length; ++i) {
+            tiles[i].draw(screen);
         }
     }
 }
