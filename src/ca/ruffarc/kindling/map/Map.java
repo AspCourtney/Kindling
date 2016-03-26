@@ -9,6 +9,7 @@ import ca.ruffarc.kindling.map.tile.*;
 import ca.ruffarc.kindling.screen.Screen;
 import com.flowpowered.nbt.*;
 import com.flowpowered.nbt.stream.NBTInputStream;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -46,8 +47,8 @@ public class Map {
                 //System.out.println("i:" + i + "a:" + a + " Item: " + item + " Index: " + (i * WIDTH  + a));
                 
                 switch (item) {
-                    case "0": tiles[i * WIDTH + a] = new Tile0(i, a); break;
-                    case "1": tiles[i * WIDTH + a] = new Tile1(i, a); break;
+                    case "0": tiles[i * WIDTH + a] = new Grass(i, a); break;
+                    case "1": tiles[i * WIDTH + a] = new Stone(i, a); break;
                 }
             }
         }
@@ -74,12 +75,12 @@ public class Map {
         for (int h = 0; h < map.height; ++h) {
             for (int w = 0; w < map.width; ++w) {
                 index = h * map.width + w;
-                //System.out.println("Index: " + index + " @x:" + h + " y:" + w);
                 value = bytes[index];
                 
                 switch(value) {
-                    case 0: map.tiles[index] = new Tile0(h, w); break;
-                    case 1: map.tiles[index] = new Tile1(h, w); break;
+                    case 0: map.tiles[index] = new Grass(h, w); break;
+                    case 1: map.tiles[index] = new Stone(h, w); break;
+                    case 2: map.tiles[index] = new Gravel(h, w); break;
                 }
             }
         }
@@ -87,7 +88,8 @@ public class Map {
         return map;
     }
     
-    public void draw(Screen screen) {
+    public void draw(Screen screen) {       
+        screen.fill(0);
         for (int i = 0; i < tiles.length; ++i) {
             tiles[i].draw(screen);
         }

@@ -5,31 +5,40 @@
  */
 package ca.ruffarc.kindling.screen;
 
-import ca.ruffarc.kindling.gui.MainComponent;
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 
 /**
  *
  * @author daniel
  */
-public class Screen {
+public class Screen extends Bitmap {
     public BufferedImage image;
-    
-    public Screen() {
-        image = new BufferedImage(MainComponent.GAME_WIDTH, MainComponent.GAME_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+    private int x_offset, y_offset;
+        
+    public Screen(int w, int h) {
+        super(w, h);
+        image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
     }
     
-    public void text(String s, int x, int y) { 
-        Graphics g = image.getGraphics();
-        g.setColor(Color.BLACK);
-        g.drawString(s, x, y);
-        //g.fillRect(15, 15, 30, 30);
-        g.dispose();
+    public void setOffset(int x, int y) {        
+        if (x < 0 && x > -((100 * 10) - 521))
+            this.x_offset = x;
+        if (y < 0 && y > -((100 * 10) - 393))
+            this.y_offset = y;
     }
     
-    public void line() {
-        System.out.println();
+    public int getX() {
+        return x_offset;
+    }
+    
+    public int getY() {
+        return y_offset;
+    }
+    
+    @Override
+    public void blit(Bitmap bitmap, int x, int y) {
+        super.blit(bitmap, x + x_offset, y + y_offset);
     }
 }

@@ -9,8 +9,11 @@ import ca.ruffarc.kindling.map.Map;
 import ca.ruffarc.kindling.screen.Screen;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
 import javax.swing.JFrame;
@@ -24,6 +27,7 @@ public class MainComponent extends Canvas implements Runnable {
     public boolean running;
     private Screen screen;
     private Map map;
+    public Keys keys;
     
     public static int GAME_WIDTH = 512;
     public static int GAME_HEIGHT = GAME_WIDTH * 3 / 4;
@@ -34,10 +38,12 @@ public class MainComponent extends Canvas implements Runnable {
         this.setMaximumSize(new Dimension(GAME_WIDTH, GAME_HEIGHT));
         
         try {
-            map = Map.loadFromNBT(MainComponent.class.getResource("/maps/map.dat"));
+            map = Map.loadFromNBT(MainComponent.class.getResource("/maps/map5.dat"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        keys = new Keys();
     }
     
     public static void main(String[] args) {
@@ -51,6 +57,7 @@ public class MainComponent extends Canvas implements Runnable {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        frame.addKeyListener(mc.keys);
         mc.start();
     }
     
@@ -67,7 +74,8 @@ public class MainComponent extends Canvas implements Runnable {
 
     @Override
     public void run() {
-        screen = new Screen();
+        //screen = new Screen(GAME_WIDTH, GAME_HEIGHT);
+        screen = new Screen(getWidth(), getHeight());
         while (running) {
             // Do it
             
@@ -90,11 +98,26 @@ public class MainComponent extends Canvas implements Runnable {
             if (bs != null) {
                 bs.show();
             }
+            
+            int move = -1;
+            if (keys.keys[KeyEvent.VK_UP].pressed)
+                screen.setOffset(screen.getX(), screen.getY() - move);
+            if (keys.keys[KeyEvent.VK_RIGHT].pressed)
+                screen.setOffset(screen.getX() + move, screen.getY());
+            if (keys.keys[KeyEvent.VK_LEFT].pressed)
+                screen.setOffset(screen.getX() - move, screen.getY());
+            if (keys.keys[KeyEvent.VK_DOWN].pressed)
+                screen.setOffset(screen.getX(), screen.getY() + move);
         }
     }
     
     public void render(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, getWidth(), getHeight());
         map.draw(screen);
         g.drawImage(screen.image, 0, 0, null);
+        
+        g.setColor(Color.RED);
+        g.fillRoundRect(256, 200, 10, 10, 3, 3);
     }
 }
